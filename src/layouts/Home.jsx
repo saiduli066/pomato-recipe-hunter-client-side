@@ -33,39 +33,48 @@ const Home = () => {
       {/* chefs category */}
 
       <div>
-        <h2>{chefs.length}: Chefs are here </h2>
+        <h2 className="text-xl text-center my-5 md:my-16 md:text-4xl font-[600] ">
+          Featuring the Famous Chefs of Australia
+        </h2>
 
-        <div className=" w-full grid grid-cols-1 md:grid-cols-3 text-center md:ms-[3em] gap-y-8">
-          {chefs.map((chef) => (
-            <div>
-              <div className="card w-96 bg-base-100 shadow-lg">
-                <figure>
-                  <img
-                    src={chef.chef_picture}
-                    className="object-cover w-full h-[295px]"
-                  />
-                </figure>
-                <div className="card-body">
-                  <h2 className="card-title">{chef.chef_name}</h2>
-                  <p>
-                    Experience: <span>{chef.experience}</span>
-                  </p>
-                  <p>
-                    Numbers of Recipes: <span>{chef.recipes.length}</span>
-                  </p>
-                  <div className="card-actions flex justify-between ">
-                    <div className="">
-                      <FaThumbsUp className="text-green-300" />{" "}
-                      <span>{chef.likes}</span>
+        <div>
+          {" "}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 text-center gap-y-8">
+            {chefs.map((chef) => (
+              <div key={chef.id}>
+                <div className="card w-80 md:w-96 bg-base-100 mx-auto shadow-lg">
+                  <figure>
+                    <img
+                      src={chef.chef_picture}
+                      className="object-cover w-full h-[295px]"
+                    />
+                  </figure>
+                  <div className="card-body text-left">
+                    <h2 className="card-title ">{chef.chef_name}</h2>
+                    <p className="font-[500]">
+                      Experience:{" "}
+                      <span className="font-normal">{chef.experience}</span>
+                    </p>
+                    <p className="font-[500]">
+                      Numbers of Recipes:{" "}
+                      <span className="font-normal">{chef.recipes.length}</span>
+                    </p>
+                    <div className="card-actions flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <FaThumbsUp className="text-green-300" />{" "}
+                        <p>{chef.likes}</p>
+                      </div>
+                      <Link to={`/chefs/${chef.id}`}>
+                        <div className="btn btn-success text-white">
+                          View Recipe
+                        </div>
+                      </Link>
                     </div>
-                    <Link to='/view-recipe'>
-                      <div className="btn btn-success">View Recipe</div>
-                    </Link>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

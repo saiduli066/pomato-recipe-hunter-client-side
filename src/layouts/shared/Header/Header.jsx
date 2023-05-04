@@ -44,7 +44,7 @@ const Header = () => {
         </div>
         <img src={logo} alt="pomato image" className="w-12 h-12 me-0" />
         <Link
-          className=" normal-case text-white text-2xl ms-7 md:ms-2 font-[700]"
+          className=" normal-case text-white text-xl md:text-3xl ms-7 md:ms-2 font-[700]"
           to="/"
         >
           Pomato
@@ -53,20 +53,20 @@ const Header = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to="/" className="text-white font-[600]">
+            <Link to="/" className="text-xl text-white font-[600]">
               Home
             </Link>
           </li>
           <li>
-            <Link className="text-white font-[600]">Blog</Link>
+            <Link className="text-xl text-white font-[600]">Blog</Link>
           </li>
           <li>
-            <Link className="text-white font-[600]">User Profile </Link>
+            <Link className="text-xl text-white font-[600]">User Profile </Link>
           </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn text-white">Login</Link>
+        <Link  className="btn btn-success md:text-xl text-white">Login</Link>
       </div>
     </div>
   );
