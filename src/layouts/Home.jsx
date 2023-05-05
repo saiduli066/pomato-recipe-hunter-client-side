@@ -18,7 +18,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+      <div>
+          
+          {/* spinner */}
       {loading && (
         <div>
           <ColorRing
@@ -31,7 +33,12 @@ const Home = () => {
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         </div>
-      )}
+          )}
+          
+          {/*...... */}
+
+
+          
       <div className="relative">
         <img
           src={bannerImage}

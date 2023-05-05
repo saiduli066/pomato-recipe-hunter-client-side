@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../providers/AuthProvider';
 import { Link } from 'react-router-dom';
+import { FaGithub, FaGoogle } from 'react-icons/fa';
 
 const Login = () => {
   const { signIn } = useContext(AuthContext);
@@ -9,9 +10,11 @@ const Login = () => {
   const [error, setError] = useState("");
   const handleLogin = (event) => {
     event.preventDefault();
-    const form = event.target;
+      const form = event.target;
+      const name = form.name.value;
     const email = form.email.value;
-    const password = form.password.value;
+      const password = form.password.value;
+      const photoUrl = form.photoUrl.value;
     console.log(email, password);
 
     signIn(email, password)
@@ -22,7 +25,7 @@ const Login = () => {
       .catch((err) => {
         console.log(err.message);
         // setError(err.message);
-        setError(err.message.split("/")[1]);
+        setError(err.message);
         form.reset();
       });
   };
@@ -32,7 +35,7 @@ const Login = () => {
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col ">
           <div className="text-center ">
-            <h1 className="text-5xl font-bold">Please Login!</h1>
+            <h1 className="text-xl md:text-5xl font-bold">Please Login!</h1>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <form onSubmit={handleLogin} className="card-body">
@@ -71,7 +74,7 @@ const Login = () => {
               </div>
               <label className="label">
                 <p>
-                  <small>New to Auth Master?</small>{" "}
+                  <small>New to Pomato?</small>{" "}
                   <Link
                     to="/register"
                     className="label-text-alt link link-hover"
@@ -80,6 +83,17 @@ const Login = () => {
                   </Link>
                 </p>
               </label>
+              <p>or continue with</p>
+              <div className="flex justify-around">
+                <div className="flex gap-2 items-center border border-green-400 rounded-lg shadow-md px-3 cursor-pointer">
+                  <FaGoogle  className='text-yellow-400'/> {""} <p>Google</p>
+                </div>
+                <div className="flex gap-2 items-center border border-green-400 rounded-lg shadow-md px-3 cursor-pointer">
+                  {" "}
+                  <FaGithub /> {""}
+                  <p> Github</p>
+                </div>
+              </div>
             </form>
           </div>
         </div>
