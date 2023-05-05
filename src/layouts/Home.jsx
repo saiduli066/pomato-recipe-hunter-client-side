@@ -107,8 +107,8 @@ const Home = () => {
                         alt={chef.chef_name}
                       />
                     </LazyLoad>
-                        </figure>
-                        
+                  </figure>
+
                   <div className="card-body text-left">
                     <h2 className="card-title ">{chef.chef_name}</h2>
                     <p className="font-[500]">
@@ -136,6 +136,82 @@ const Home = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* extra section-1 */}
+
+      {/* testimonials section */}
+
+      <div className="bg-gray-100 py-10 px-5 md:px-20">
+        <h2 className="text-xl text-center mb-5 md:mb-10 md:text-4xl font-[600] ">
+          What our users say
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-white shadow-md rounded-md p-5 flex flex-col items-center transform hover:scale-[1.05] transition-all duration-[300ms]">
+            <img
+              src="https://randomuser.me/api/portraits/women/12.jpg"
+              alt="Anna Smith"
+              className="w-20 h-20 rounded-full object-cover"
+            />
+            <h3 className="text-lg mt-3 font-[500]">Anna Smith</h3>
+            <p className="text-sm mt-2 text-gray-600 text-center">
+              "I love this website! It has helped me learn so many new recipes
+              and improve my cooking skills. The chefs are amazing and very
+              helpful."
+            </p>
+          </div>
+          <div className="bg-white shadow-md rounded-md p-5 flex flex-col items-center transform hover:scale-[1.05] transition-all duration-[300ms]">
+            <img
+              src="https://randomuser.me/api/portraits/men/34.jpg"
+              alt="John Doe"
+              className="w-20 h-20 rounded-full object-cover"
+            />
+            <h3 className="text-lg mt-3 font-[500]">John Doe</h3>
+            <p className="text-sm mt-2 text-gray-600 text-center">
+              "This website is awesome! I have learned how to make some of my
+              favorite dishes from different cuisines. The chefs are very
+              friendly and knowledgeable."
+            </p>
+          </div>
+          <div className="bg-white shadow-md rounded-md p-5 flex flex-col items-center transform hover:scale-[1.05] transition-all duration-[300ms]">
+            <img
+              src="https://randomuser.me/api/portraits/women/45.jpg"
+              alt="Mary Jones"
+              className="w-20 h-20 rounded-full object-cover"
+            />
+            <h3 className="text-lg mt-3 font-[500]">Mary Jones</h3>
+            <p className="text-sm mt-2 text-gray-600 text-center">
+              "This website is amazing! I have discovered so many new dishes and
+              flavors. The chefs are very professional and creative."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* extra section-2 */}
+      {/* subscribe section */}
+
+      <div className="bg-green-500 py-10 px-5 md:px-20">
+        <h2 className="text-xl text-center text-white mb-5 md:mb-10 md:text-4xl font-[600] ">
+          Subscribe to our newsletter
+        </h2>
+        <p className="text-sm text-center text-white mb-5 md:mb-10">
+          Get the latest recipes, tips and news delivered to your inbox
+        </p>
+        <form className="flex flex-col items-center">
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            className="w-full md:w-[400px] py-3 px-5 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-green-400"
+          />
+          <button
+            type="submit"
+            className="w-full md:w-[400px] py-3 px-5 mt-5 rounded-md bg-white text-green-500 font-bold hover:bg-green-400 hover:text-white transition-all duration-[300ms]"
+          >
+            Subscribe
+          </button>
+        </form>
       </div>
     </div>
   );
