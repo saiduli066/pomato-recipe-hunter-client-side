@@ -4,6 +4,8 @@ import { FaThumbsUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { ColorRing } from "react-loader-spinner";
+import LazyLoad from "react-lazy-load";
+
 
 const Home = () => {
   const { loading, setLoading } = useContext(AuthContext);
@@ -18,9 +20,8 @@ const Home = () => {
   }, []);
 
   return (
-      <div>
-          
-          {/* spinner */}
+    <div>
+      {/* spinner */}
       {loading && (
         <div>
           <ColorRing
@@ -33,12 +34,10 @@ const Home = () => {
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         </div>
-          )}
-          
-          {/*...... */}
+      )}
 
+      {/*...... */}
 
-          
       <div className="relative">
         <img
           src={bannerImage}
@@ -65,7 +64,7 @@ const Home = () => {
         <div>
           {" "}
           <div className="w-full grid grid-cols-1 md:grid-cols-3 text-center gap-y-8">
-            {chefs.map((chef) => (
+            {/* {chefs.map((chef) => (
               <div key={chef.id}>
                 <div className="card w-80 md:w-96 bg-base-100 mx-auto shadow-lg">
                   <figure>
@@ -73,7 +72,43 @@ const Home = () => {
                       src={chef.chef_picture}
                       className="object-cover w-full h-[295px]"
                     />
-                  </figure>
+                  </figure> */}
+            {chefs.map((chef) => (
+              <div key={chef.id}>
+                <div className="card w-80 md:w-96 bg-base-100 mx-auto shadow-lg">
+                  <figure>
+                    <LazyLoad
+                      height={295}
+                      offsetVertical={500}
+                      debounce={false}
+                      placeholder={
+                        <div className="w-full h-[295px] flex items-center justify-center">
+                          <ColorRing
+                            visible={true}
+                            height="80"
+                            width="80"
+                            ariaLabel="blocks-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="blocks-wrapper"
+                            colors={[
+                              "#e15b64",
+                              "#f47e60",
+                              "#f8b26a",
+                              "#abbd81",
+                              "#849b87",
+                            ]}
+                          />
+                        </div>
+                      }
+                    >
+                      <img
+                        src={chef.chef_picture}
+                        className="object-cover w-full h-[295px]"
+                        alt={chef.chef_name}
+                      />
+                    </LazyLoad>
+                        </figure>
+                        
                   <div className="card-body text-left">
                     <h2 className="card-title ">{chef.chef_name}</h2>
                     <p className="font-[500]">
