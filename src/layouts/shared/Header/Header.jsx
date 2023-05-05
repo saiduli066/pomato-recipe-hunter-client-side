@@ -1,11 +1,13 @@
 
 
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/images/pomato-modified.png";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 const Header = () => {
 
+    const {user} = useContext(AuthContext);
                    /**NavBar**/ 
   return (
     <div className="navbar bg-black">

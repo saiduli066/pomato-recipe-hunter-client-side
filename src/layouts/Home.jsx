@@ -1,19 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import bannerImage from "../assets/images/foodhub-slider-main-food-v4.jpg";
 import { FaThumbsUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
-const Home = () => {
+import { AuthContext } from "../providers/AuthProvider";
+import { ColorRing } from "react-loader-spinner";
 
-    const [chefs, setChefs] = useState([]);
-    useEffect(() => {
+const Home = () => {
+  const { loading, setLoading } = useContext(AuthContext);
+
+  const [chefs, setChefs] = useState([]);
+  useEffect(() => {
     fetch(`https://chef-recipe-hunter-server-side-saiduli066.vercel.app/chefs`)
       .then((res) => res.json())
       .then((data) => setChefs(data))
       .catch((error) => console.error(error));
-    }, [])
-    
+    setLoading(false);
+  }, []);
+
   return (
     <div>
+      {loading && (
+        <div>
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        </div>
+      )}
       <div className="relative">
         <img
           src={bannerImage}

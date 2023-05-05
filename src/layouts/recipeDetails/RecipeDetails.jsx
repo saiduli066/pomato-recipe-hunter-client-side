@@ -11,10 +11,6 @@ const RecipeDetails = () => {
   const { chef_picture, chef_name, experience, bio, recipes, rating, likes } =
     ChefAndRecipes;
 
-    //  const handleFavorite = (makeDisable) => {
-    //    toast("Added to the favorite list!");
-    //    setIsClicked(makeDisable);
-    //  };
       const [favoriteList, setFavoriteList] = useState([]);
 
       const handleFavorite = (recipe) => {
