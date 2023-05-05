@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaBookmark, FaRegStar, FaStar, FaThumbsUp } from "react-icons/fa";
 import Rating from "react-rating";
 import { useLoaderData, useParams } from "react-router-dom";
@@ -6,13 +6,31 @@ import { toast } from "react-toastify";
 
 
 const RecipeDetails = () => {
-     const handleFavorite = () => {
-       toast("Added to the favorite list!");
-     };
   const { id } = useParams();
   const ChefAndRecipes = useLoaderData();
   const { chef_picture, chef_name, experience, bio, recipes, rating, likes } =
     ChefAndRecipes;
+
+    //  const handleFavorite = (makeDisable) => {
+    //    toast("Added to the favorite list!");
+    //    setIsClicked(makeDisable);
+    //  };
+      const [favoriteList, setFavoriteList] = useState([]);
+
+      const handleFavorite = (recipe) => {
+        toast("Added to the favorite list!");
+        setFavoriteList((prevList) => [...prevList, recipe]);
+    };
+    
+     const isFavorite = (recipe) => {
+       return favoriteList.some((favRecipe) => favRecipe.id === recipe.id);
+     };
+
+    
+    // const [isClicked, setIsClicked] = useState(false);
+
+
+
   return (
     // Chef details..........//
 
@@ -95,12 +113,18 @@ const RecipeDetails = () => {
                   ></Rating>
                   <span>{recipe.rating}</span>
                 </div>
-                <div className="flex gap-2 ">
-                  <p className="font-[500] md:text-xl  mb-2">Favorite</p>{" "}
-                  <FaBookmark
-                    onClick={handleFavorite}
-                    className="text-green-400  md:h-6"
-                  />
+                <div className="flex gap-2 items-center">
+                            <p className="font-[500] md:text-xl  mb-2">Favorite</p>{" "}
+                            
+                  <button
+                    className={`btn btn-outline px-6 ${
+                      isFavorite(recipe) ? "btn-disabled" : ""
+                    } `}
+                    onClick={() => handleFavorite(recipe)}
+                    disabled={isFavorite(recipe)}
+                  >
+                    <FaBookmark className="text-green-400" />
+                  </button>
                 </div>{" "}
               </div>
             </div>
