@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 
 const Register = () => {
-  const { user, createUser } = useContext(AuthContext);
+  const { createUser, setUser } = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  // const navigate = useNavigate();  //don't forget to import
 
   const handleRegister = (event) => {
     event.preventDefault();
@@ -11,16 +14,45 @@ const Register = () => {
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
+    const photoUrl = form.photoUrl.value;
+    console.log(name, email, password, photoUrl);
+
+    //password validate
+    if (password.length<6) {
+        setError("must input at least six characters long password ");
+      form.reset();
+      return;
+    }
+    // createUser(email, password)
+    //   .then((result) => {
+    //     // console.log(result.user);
+    //     const createdUser = result.user;
+    //       setUser(createdUser);
+    //       setSuccess('Registration Successful!')
+    //     form.reset();
+    //     setError("");
+    //   })
+    //   .catch((err) => {
+    //     // console.log("error: ", err.message);
+    //     setError(err.message);
+    //     form.reset();
+    //   });
     createUser(email, password)
       .then((result) => {
-        console.log(result.user);
-        form.reset();
+        const createdUser = result.user;
+          setUser(createdUser);
+          setSuccess('Registration Successful!');
+          // navigate("/");
+          form.reset();
+          setError("");
       })
       .catch((err) => {
-        console.log("error: ", err.message);
+        setError(err.message);
         form.reset();
       });
   };
+
+
 
   return (
     <div>
@@ -90,6 +122,8 @@ const Register = () => {
                   </Link>
                 </p>
               </label>
+              {error && <p className="text-red-400">Error: {error} </p>}{" "}
+              {success && <p className="text-green-400">{success} </p>}{" "}
             </form>
           </div>
         </div>

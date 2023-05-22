@@ -1,33 +1,104 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../providers/AuthProvider';
-import { Link } from 'react-router-dom';
-import { FaGithub, FaGoogle } from 'react-icons/fa';
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import { Link, useNavigate } from "react-router-dom";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const Login = () => {
-  const { signIn } = useContext(AuthContext);
-  console.log(signIn);
-
+  const { signIn, setUser, handleGoogleSignIn, handleGitSignIn } =
+    useContext(AuthContext);
+    console.log(signIn);
+  const navigate = useNavigate();  
   const [error, setError] = useState("");
-  const handleLogin = (event) => {
+  const [success, setSuccess] = useState("");
+
+  // const handleLogin = (event) => {
+  //   event.preventDefault();
+  //   const form = event.target;
+  //   const email = form.email.value;
+  //   const password = form.password.value;
+  //   console.log(email, password);
+
+  //   signIn(email, password)
+  //     .then((result) => {
+  //       const loggedUser = result.user;
+  //       setUser(loggedUser);
+  //       setSuccess("Login successful!");
+  //       // navigate("/");
+
+  //       setError("");
+  //       form.reset();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //       // setError(err.message);
+  //       setError(err.message);
+  //       form.reset();
+  //     });
+
+  //   handleGoogleSignIn()
+  //     .then((result) => {
+  //       const loggedInUser = result.user;
+  //       console.log(loggedInUser);
+  //       setUser(loggedInUser);
+  //     })
+  //     .catch((err) => {
+  //       console.log("error :", err.message);
+  //       setError(err.message);
+  //     });
+  //   handleGitSignIn()
+  //     .then((result) => {
+  //       const loggedInUser = result.user;
+  //       console.log(loggedInUser);
+  //       setUser(loggedInUser);
+  //     })
+  //     .catch((err) => {
+  //       console.log("error :", err.message);
+  //       setError(err.message);
+  //     });
+  // };
+
+  const handleLogin = async (event) => {
     event.preventDefault();
-      const form = event.target;
-      const name = form.name.value;
+    const form = event.target;
     const email = form.email.value;
-      const password = form.password.value;
-      const photoUrl = form.photoUrl.value;
+    const password = form.password.value;
     console.log(email, password);
 
-    signIn(email, password)
-      .then((result) => {
-        console.log(result.user);
-        form.reset();
-      })
-      .catch((err) => {
-        console.log(err.message);
-        // setError(err.message);
+    try {
+      const result = await signIn(email, password);
+      const loggedUser = result.user;
+      setUser(loggedUser);
+      setSuccess("Login successful!");
+      navigate("/");
+      setError("");
+      form.reset();
+
+      try {
+        const googleResult = await handleGoogleSignIn();
+        const loggedInUser = googleResult.user;
+        console.log(loggedInUser);
+        setUser(loggedInUser);
+        navigate("/");
+      } catch (err) {
+        console.log("error :", err.message);
         setError(err.message);
-        form.reset();
-      });
+      }
+
+      try {
+        const gitResult = await handleGitSignIn();
+        const loggedInUser = gitResult.user;
+        console.log(loggedInUser);
+        setUser(loggedInUser);
+        navigate("/");
+      } catch (err) {
+        console.log("error :", err.message);
+        setError(err.message);
+      }
+    } catch (err) {
+      console.log(err.message);
+      setError(err.message);
+      form.reset();
+    }
   };
 
   return (
@@ -85,15 +156,23 @@ const Login = () => {
               </label>
               <p>or continue with</p>
               <div className="flex justify-around">
-                <div className="flex gap-2 items-center border border-green-400 rounded-lg shadow-md px-3 cursor-pointer">
-                  <FaGoogle  className='text-yellow-400'/> {""} <p>Google</p>
+                <div
+                  onClick={handleGoogleSignIn}
+                  className="flex gap-2 items-center border border-green-400 rounded-lg shadow-md px-3 cursor-pointer"
+                >
+                  <FaGoogle className="text-yellow-400" /> {""} <p>Google</p>
                 </div>
-                <div className="flex gap-2 items-center border border-green-400 rounded-lg shadow-md px-3 cursor-pointer">
+                <div
+                  onClick={handleGitSignIn}
+                  className="flex gap-2 items-center border border-green-400 rounded-lg shadow-md px-3 cursor-pointer"
+                >
                   {" "}
                   <FaGithub /> {""}
                   <p> Github</p>
                 </div>
               </div>
+              {error && <p className="text-red-400">Error: {error} </p>}{" "}
+              {success && <p className="text-green-400">{success} </p>}{" "}
             </form>
           </div>
         </div>

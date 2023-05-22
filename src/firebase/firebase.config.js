@@ -5,12 +5,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC0RHjBSXfT6fTGxUNgq4i6MFw41M1BbRY",
-  authDomain: "pomato-recipe-hunter.firebaseapp.com",
-  projectId: "pomato-recipe-hunter",
-  storageBucket: "pomato-recipe-hunter.appspot.com",
-  messagingSenderId: "728259367257",
-  appId: "1:728259367257:web:4b953437ce41a52cbe3c48",
+  apiKey:  import.meta.env.VITE_apiKey ,
+  authDomain: import.meta.env.VITE_authDomain ,
+  projectId:  import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId:  import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId 
 };
 
 // Initialize Firebase

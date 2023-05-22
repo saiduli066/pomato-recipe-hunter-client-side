@@ -7,7 +7,9 @@ import { AuthContext } from "../../../providers/AuthProvider";
 
 const Header = () => {
 
-    const {user} = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+
+
                    /**NavBar**/ 
   return (
     <div className="navbar bg-black">
@@ -34,10 +36,14 @@ const Header = () => {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <Link className="font-[600]">Home</Link>
+              <Link to="/" className="font-[600]">
+                Home
+              </Link>
             </li>
             <li>
-              <Link className="font-[600]">Blog</Link>
+              <Link to="/blog" className="font-[600]">
+                Blog
+              </Link>
             </li>
             <li>
               <Link className="font-[600]">Profile picture</Link>
@@ -60,7 +66,9 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link className="text-xl text-white font-[600]">Blog</Link>
+            <Link to="/blog" className="text-xl text-white font-[600]">
+              Blog
+            </Link>
           </li>
           <li>
             <Link className="text-xl text-white font-[600]">User Profile </Link>
@@ -68,7 +76,18 @@ const Header = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link to='/login'  className="btn btn-success md:text-xl text-white">Login</Link>
+        {user ? (
+          <button
+            onClick={logOut}
+            className="btn btn-secondary md:text-xl text-white"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" className="btn btn-success md:text-xl text-white">
+            Login
+          </Link>
+        )}{" "}
       </div>
     </div>
   );

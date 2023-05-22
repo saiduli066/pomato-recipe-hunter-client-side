@@ -1,5 +1,12 @@
 import React, { useRef } from "react";
-import { PDFDownloadLink, Document, Page, Text } from "@react-pdf/renderer";
+import {
+  PDFDownloadLink,
+  Document,
+  Page,
+  View,
+  Text,
+  StyleSheet,
+} from "@react-pdf/renderer";
 
 const BlogPage = () => {
   const QUESTIONS = [
@@ -26,18 +33,66 @@ const BlogPage = () => {
     },
   ];
 
+  // const MyDoc = () => (
+  //   <Document>
+  //     {QUESTIONS.map((q, i) => (
+  //       <Page key={i}>
+  //         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
+  //           {q.question}
+  //         </Text>
+  //         <Text>{q.answer}</Text>
+  //       </Page>
+  //     ))}
+  //   </Document>
+  // );
+
+
   const MyDoc = () => (
     <Document>
-      {QUESTIONS.map((q, i) => (
-        <Page key={i}>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
-            {q.question}
-          </Text>
-          <Text>{q.answer}</Text>
-        </Page>
-      ))}
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text style={styles.header}>Blog Questions</Text>
+          {/* Replace `QUESTIONS` with your array of objects */}
+          {QUESTIONS.map((q, i) => (
+            <View key={i} style={styles.question}>
+              <Text style={styles.questionTitle}>{q.question}</Text>
+              <Text style={styles.questionAnswer}>{q.answer}</Text>
+            </View>
+          ))}
+        </View>
+      </Page>
     </Document>
   );
+
+  const styles = StyleSheet.create({
+    page: {
+      backgroundColor: "#fff",
+      padding: 24,
+      fontFamily: "Helvetica",
+    },
+    section: {
+      margin: 20,
+    },
+    header: {
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 10,
+      textAlign: "center",
+    },
+    question: {
+      marginBottom: 10,
+    },
+    questionTitle: {
+      fontSize: 14,
+      fontWeight: "bold",
+      marginBottom: 5,
+    },
+    questionAnswer: {
+      fontSize: 12,
+      lineHeight: 1.5,
+    },
+  });
+
 
   const pdfRef = useRef();
 
