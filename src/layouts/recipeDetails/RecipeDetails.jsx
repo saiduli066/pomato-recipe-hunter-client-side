@@ -1,131 +1,124 @@
 import React, { useState } from "react";
-import { FaBookmark, FaRegStar, FaStar, FaThumbsUp } from "react-icons/fa";
+import { FaBookmark, FaRegStar, FaStar, FaPlay } from "react-icons/fa";
 import Rating from "react-rating";
 import { useLoaderData, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-
 const RecipeDetails = () => {
   const { id } = useParams();
-  const ChefAndRecipes = useLoaderData();
-  const { chef_picture, chef_name, experience, bio, recipes, rating, likes } =
-    ChefAndRecipes;
+  const recipe = useLoaderData();
+  const {
+    title,
+    image,
+    category,
+    area,
+    instructions,
+    ingredients,
+    isPremium,
+    video,
+  } = recipe;
 
-      const [favoriteList, setFavoriteList] = useState([]);
+  const [favoriteList, setFavoriteList] = useState([]);
 
-      const handleFavorite = (recipe) => {
-        toast("Added to the favorite list!");
-        setFavoriteList((prevList) => [...prevList, recipe]);
-    };
-    
-     const isFavorite = (recipe) => {
-       return favoriteList.some((favRecipe) => favRecipe.id === recipe.id);
-     };
+  const handleFavorite = (recipe) => {
+    toast.success("Added to your favorites!");
+    setFavoriteList((prevList) => [...prevList, recipe]);
+  };
 
-    
-    // const [isClicked, setIsClicked] = useState(false);
-
-
+  const isFavorite = (recipe) => {
+    return favoriteList.some((favRecipe) => favRecipe.id === recipe.id);
+  };
 
   return (
-    // Chef details..........//
-
-    <div className="mx-2">
-      <div className="mx-auto  md:mx-2em md:flex md:justify-center w-full my-5 md:my-16">
-        <div className="card md:card-side w-full md:w-[90%] mx-auto bg-base-100 shadow-xl">
-          <figure className="md:w-[40%]">
-            <img
-              className="object-cover rounded w-full h-auto md:w-full md:h-[324px] px-4 max-w-full"
-              src={chef_picture}
-              alt={chef_name}
-            />
-          </figure>
-          <div className="card-body md:w-[50%]">
-            <h2 className="card-title">{ChefAndRecipes.chef_name}</h2>
-            <p>{bio}</p>
-            <p className="font-[500]">
-              Experience: <span className="font-normal">{experience}</span>
-            </p>
-            <p className="font-[500]">
-              Numbers of Recipes:{" "}
-              <span className="font-normal">{recipes.length}</span>
-            </p>
-            <div className="flex items-center">
-              <FaThumbsUp className="text-green-300" /> <p>{likes}</p>
-            </div>
-
-            <div className="card-actions">
-              <div className="">
-                <Rating
-                  placeholderRating={rating}
-                  readonly
-                  emptySymbol={<FaRegStar />}
-                  placeholderSymbol={<FaStar className="text-orange-400" />}
-                  fullSymbol={<FaStar />}
-                ></Rating>
-                <span>{rating}</span>
-              </div>
-            </div>
+    <div className="bg-white min-h-screen">
+      {/* Hero Media */}
+      <div className="relative h-[60vh] w-full">
+        <div className="absolute inset-0 bg-black/40 z-10"></div>
+        <img src={image} alt={title} className="w-full h-full object-cover" />
+        <div className="absolute bottom-0 left-0 z-20 container mx-auto px-6 pb-12 text-white">
+          <div className="flex gap-2 mb-4">
+            <span className="badge badge-accent uppercase font-bold tracking-widest">
+              {category}
+            </span>
+            <span className="badge badge-outline text-white uppercase font-bold tracking-widest">
+              {area}
+            </span>
+            {isPremium && (
+              <span className="badge badge-error uppercase font-bold tracking-widest">
+                Premium
+              </span>
+            )}
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">
+            {title}
+          </h1>
+          <div className="flex gap-4">
+            <button
+              className={`btn btn-lg gap-2 ${isFavorite(recipe) ? "btn-success" : "btn-primary"}`}
+              onClick={() => handleFavorite(recipe)}
+              disabled={isFavorite(recipe)}
+            >
+              <FaBookmark />
+              {isFavorite(recipe) ? "Saved" : "Save Recipe"}
+            </button>
+            {video && (
+              <a
+                href={video}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-lg btn-outline text-white hover:bg-white hover:text-black gap-2"
+              >
+                <FaPlay className="text-sm" /> Watch Video
+              </a>
+            )}
           </div>
         </div>
       </div>
 
-      <h2 className="font-[600] md:text-3xl  md:my-10 text-center">Recipes</h2>
-
-      {/*.............. recipe details......... */}
-
-      <div className="">
-        {recipes.map((recipe) => (
-          <div className="card md:w-[90%] mx-auto md:my-10 bg-base-100 shadow-xl">
-            <div className="md:flex md:items-center">
-              <figure className="px-10 pt-10">
-                <img
-                  src={recipe.image_url}
-                  alt={recipe.recipe_name}
-                  className="rounded-xl max-w-full w-full h-auto md:h-[20em]"
-                />
-              </figure>
-              <div className="px-10 pt-10">
-                <h2 className="font-[600] md:text-2xl mb-2">
-                  {recipe.recipe_name}
-                </h2>
-                <h4 className="font-[500] md:text-xl  mb-2">Ingredients:</h4>
-                {recipe.ingredients.map((ingredient) => (
-                  <li className="">{ingredient}</li>
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Ingredients Sidebar */}
+          <div className="lg:col-span-4">
+            <div className="bg-orange-50 p-8 rounded-3xl sticky top-24">
+              <h3 className="text-2xl font-bold mb-6 text-gray-800 border-b border-orange-200 pb-4">
+                Ingredients
+              </h3>
+              <ul className="space-y-4">
+                {ingredients.map((ing, index) => (
+                  <li key={index} className="flex items-start text-gray-700">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center text-xs font-bold mr-3 mt-1">
+                      ✓
+                    </span>
+                    <span className="text-lg">{ing}</span>
+                  </li>
                 ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Preparation Steps */}
+          <div className="lg:col-span-8">
+            <div className="prose prose-lg max-w-none">
+              <h3 className="text-3xl font-bold mb-8 text-gray-800">
+                Cooking Instructions
+              </h3>
+              <div className="text-gray-600 leading-relaxed whitespace-pre-line text-xl font-light">
+                {instructions}
               </div>
             </div>
-            <div className="card-body">
-              <h4 className="font-[500] md:text-xl  mb-2">Cooking Method:</h4>
-              <p className="text-justify">{recipe.cooking_method}</p>
-              <div className="card-actions flex items-center justify-between">
-                <div className="">
-                  <Rating
-                    placeholderRating={recipe.rating}
-                    readonly
-                    emptySymbol={<FaRegStar />}
-                    placeholderSymbol={<FaStar className="text-orange-400" />}
-                    fullSymbol={<FaStar />}
-                  ></Rating>
-                  <span>{recipe.rating}</span>
-                </div>
-                <div className="flex gap-2 items-center">
-                            <p className="font-[500] md:text-xl  mb-2">Favorite</p>{" "}
-                            
-                  <button
-                    className={`btn btn-outline px-6 ${
-                      isFavorite(recipe) ? "btn-disabled" : ""
-                    } `}
-                    onClick={() => handleFavorite(recipe)}
-                    disabled={isFavorite(recipe)}
-                  >
-                    <FaBookmark className="text-green-400" />
-                  </button>
-                </div>{" "}
+
+            {/* Simulated Reviews Section for "Senior" feel */}
+            <div className="mt-16 pt-10 border-t">
+              <h3 className="text-2xl font-bold mb-6">Chef's Notes</h3>
+              <div className="bg-gray-100 p-6 rounded-xl border-l-4 border-yellow-500 italic text-gray-600">
+                "For the best results, ensure all ingredients are at room
+                temperature before starting. Allow the dish to rest for 10
+                minutes before serving to let the flavors meld together
+                perfectly."
               </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

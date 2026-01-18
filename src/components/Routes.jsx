@@ -5,8 +5,13 @@ import Home from "../layouts/Home";
 import NotFoundPage from "../layouts/NotFoundPage";
 import RecipeDetails from "../layouts/recipeDetails/RecipeDetails";
 import Login from "./login/Login";
-import Register from "./register/register";
+import Register from "./register/Register";
 import BlogPage from "./blogPage/BlogPage";
+import PrivateRoute from "./PrivateRoute";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Chefs from "./pages/Chefs";
+import ChefRecipes from "./pages/ChefRecipes";
 
 const router = createBrowserRouter([
   {
@@ -18,12 +23,30 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/chefs/:id",
-        element: <RecipeDetails />,
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/chefs",
+        element: <Chefs />,
+      },
+      {
+        path: "/chef-recipes/:id",
+        element: <ChefRecipes />,
+      },
+      {
+        path: "/recipes/:id",
+        element: (
+          <PrivateRoute>
+            <RecipeDetails />
+          </PrivateRoute>
+        ),
         loader: ({ params }) =>
-          fetch(
-            `https://chef-recipe-hunter-server-side-saiduli066.vercel.app/chefs/${params.id}`
-          ),
+          fetch(`http://localhost:5000/recipes/${params.id}`),
       },
       {
         path: "/login",
@@ -32,10 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
-        },
-        {
-            path: '/blog',
-            element:<BlogPage/>
+      },
+      {
+        path: "/blog",
+        element: <BlogPage />,
       },
       {
         path: "/*",

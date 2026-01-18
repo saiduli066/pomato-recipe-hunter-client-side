@@ -1,95 +1,175 @@
-
-
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../../assets/images/pomato-modified.png";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
-    const { user, logOut } = useContext(AuthContext);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Chefs", path: "/chefs" },
+    { name: "Blog", path: "/blog" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
 
-                   /**NavBar**/ 
+  const handleLogout = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
+
   return (
-    <div className="navbar bg-black">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+    <header
+      className={`fixed w-full top-0 z-50 transition-all duration-300 border-b ${
+        scrolled
+          ? "bg-white shadow-sm border-gray-100 py-3"
+          : "bg-white border-transparent py-4 shadow-sm"
+      }`}
+    >
+      <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <img
+            src={logo}
+            alt="Aussie Cuisine"
+            className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+          <span
+            className={`font-serif text-2xl font-bold tracking-tight ${scrolled ? "text-slate-800" : "text-slate-800 lg:text-slate-800"}`}
           >
-            <li>
-              <Link to="/" className="font-[600]">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/blog" className="font-[600]">
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link className="font-[600]">Profile picture</Link>
-            </li>
-          </ul>
-        </div>
-        <img src={logo} alt="pomato image" className="w-12 h-12 me-0" />
-        <Link
-          className=" normal-case text-white text-xl md:text-3xl ms-7 md:ms-2 font-[700]"
-          to="/"
-        >
-          Pomato
+            Aussie<span className="text-amber-600">Cuisine</span>
+          </span>
         </Link>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link to="/" className="text-xl text-white font-[600]">
-              Home
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `text-sm font-medium tracking-wide transition-colors duration-300 hover:text-amber-600 ${
+                  isActive
+                    ? "text-amber-600 font-bold border-b-2 border-amber-600 pb-1"
+                    : scrolled
+                      ? "text-slate-600"
+                      : "text-slate-600"
+                }`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* User Auth */}
+        <div className="hidden md:flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <div
+                className="tooltip tooltip-bottom"
+                data-tip={user.displayName}
+              >
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    className="w-9 h-9 rounded-full object-cover ring-2 ring-amber-100 ring-offset-2"
+                  />
+                ) : (
+                  <FaUserCircle className="w-8 h-8 text-slate-400" />
+                )}
+              </div>
+              <button
+                onClick={handleLogout}
+                className="btn btn-sm btn-outline border-slate-300 hover:bg-slate-800 hover:border-slate-800 hover:text-white capitalize rounded-full px-5 font-normal"
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="btn btn-sm bg-slate-900 border-slate-900 text-white hover:bg-amber-600 hover:border-amber-600 hover:shadow-lg hover:shadow-amber-600/20 capitalize rounded-full px-6 font-normal transition-all duration-300"
+            >
+              Sign In
             </Link>
-          </li>
-          <li>
-            <Link to="/blog" className="text-xl text-white font-[600]">
-              Blog
-            </Link>
-          </li>
-          <li>
-            <Link className="text-xl text-white font-[600]">User Profile </Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-        {user ? (
+          )}
+        </div>
+
+        {/* Mobile Toggle */}
+        <div className="md:hidden flex items-center gap-4">
+          {user && (
+            <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-amber-100">
+              <img
+                src={user.photoURL || "https://via.placeholder.com/150"}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
           <button
-            onClick={logOut}
-            className="btn btn-secondary md:text-xl text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-slate-700 hover:text-amber-600 transition-colors"
           >
-            Logout
+            {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
-        ) : (
-          <Link to="/login" className="btn btn-success md:text-xl text-white">
-            Login
-          </Link>
-        )}{" "}
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl transition-all duration-300 origin-top transform ${mobileMenuOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 h-0 overflow-hidden"}`}
+      >
+        <div className="flex flex-col p-6 space-y-4">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setMobileMenuOpen(false)}
+              className={`text-lg font-medium ${location.pathname === link.path ? "text-amber-600" : "text-slate-700"}`}
+            >
+              {link.name}
+            </Link>
+          ))}
+          <div className="pt-4 border-t border-gray-100">
+            {user ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="text-red-500 font-medium"
+              >
+                Log Out
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-slate-900 font-medium hover:text-amber-600"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
   );
 };
 

@@ -1,29 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import bannerImage from "../assets/images/foodhub-slider-main-food-v4.jpg";
-import { FaThumbsUp } from "react-icons/fa";
+import { FaThumbsUp, FaArrowRight, FaClock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { ColorRing } from "react-loader-spinner";
 import LazyLoad from "react-lazy-load";
 
-
 const Home = () => {
   const { loading, setLoading } = useContext(AuthContext);
 
-  const [chefs, setChefs] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(6);
+
   useEffect(() => {
-    fetch(`https://chef-recipe-hunter-server-side-saiduli066.vercel.app/chefs`)
+    fetch(`http://localhost:5000/recipes`)
       .then((res) => res.json())
-      .then((data) => setChefs(data))
+      .then((data) => setRecipes(data))
       .catch((error) => console.error(error));
     setLoading(false);
   }, []);
 
+  const handleSeeMore = () => {
+    setVisibleCount(recipes.length);
+  };
+
   return (
-    <div>
+    <div className="bg-gray-50 min-h-screen">
       {/* spinner */}
       {loading && (
-        <div>
+        <div className="flex h-screen items-center justify-center">
           <ColorRing
             visible={true}
             height="80"
@@ -31,187 +36,178 @@ const Home = () => {
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            colors={["#E4A951", "#2A303C", "#e15b64", "#abbd81", "#849b87"]}
           />
         </div>
       )}
 
-      {/*...... */}
+      {/* Hero Section */}
+      <div className="relative h-screen overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={bannerImage}
+            className="w-full h-full object-cover transition-transform duration-[10s] hover:scale-110"
+            alt="Australian Cuisine"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+        </div>
 
-      <div className="relative">
-        <img
-          src={bannerImage}
-          className="w-full md:h-[100vh]"
-          alt="Banner Image"
-        />
-        <div className="absolute top-0 left-0 w-full h-full flex  flex-col justify-center p-3 z-10">
-          <h1 className=" text-xl md:text-5xl text-white font-bold mb-4">
-            Where cooking meets creativity
-          </h1>
-          <p className="text-sm  md:text-2xl font-[400] text-white">
-            Learn how to make your favorite restaurant's dishes
-          </p>
+        <div className="relative container mx-auto h-full flex items-center px-6">
+          <div className="max-w-3xl space-y-8">
+            <div className="inline-block px-4 py-1 border border-yellow-400 text-yellow-400 rounded-full text-sm font-semibold tracking-wide uppercase">
+              Exclusive Recipes
+            </div>
+            <h1 className="text-5xl md:text-7xl text-white font-bold leading-tight">
+              Taste the Spirit of <br />{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                Australia
+              </span>
+            </h1>
+            <p className="text-gray-200 text-lg md:text-xl font-light leading-relaxed max-w-2xl">
+              Discover a curated collection of authentic Australian recipes.
+              From the rugged outback to modern Sydney cafes, experience
+              culinary excellence.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button className="btn btn-primary btn-lg border-none bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30">
+                Explore Recipes <FaArrowRight className="ml-2" />
+              </button>
+              <button className="btn btn-outline btn-lg text-white hover:bg-white/20">
+                Learn More
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* chefs category */}
+      {/* Features Section */}
+      <div className="py-20 bg-white">
+        <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+          {[
+            {
+              title: "Authentic Flavors",
+              desc: "Recipes sourced directly from top Australian chefs.",
+            },
+            {
+              title: "Premium Content",
+              desc: "Exclusive access to masterclasses and special dishes.",
+            },
+            {
+              title: "Community Driven",
+              desc: "Join thousands of food lovers sharing their passion.",
+            },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition duration-300"
+            >
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto text-orange-600 text-2xl font-bold">
+                {idx + 1}
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">{item.title}</h3>
+              <p className="text-gray-600">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <div>
-        <h2 className="text-xl text-center my-5 md:my-16 md:text-4xl font-[600] ">
-          Featuring the Famous Chefs of Australia
-        </h2>
+      {/* Recipe Section */}
+      <div className="container mx-auto py-24 px-6" id="recipes">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Latest Creations
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Hand-picked recipes for the discerning home cook. Rated by our
+            community.
+          </p>
+        </div>
 
-        <div>
-          {" "}
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 text-center gap-y-8">
-            {/* {chefs.map((chef) => (
-              <div key={chef.id}>
-                <div className="card w-80 md:w-96 bg-base-100 mx-auto shadow-lg">
-                  <figure>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {recipes.slice(0, visibleCount).map((recipe) => (
+            <Link
+              to={`/recipes/${recipe.id}`}
+              key={recipe.id}
+              className="group"
+            >
+              <div className="card bg-white shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 h-full group-hover:-translate-y-2">
+                <figure className="relative h-72 overflow-hidden">
+                  <LazyLoad height={288} offset={100}>
                     <img
-                      src={chef.chef_picture}
-                      className="object-cover w-full h-[295px]"
+                      src={recipe.image}
+                      alt={recipe.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                  </figure> */}
-            {chefs.map((chef) => (
-              <div key={chef.id}>
-                <div className="card w-80 md:w-96 bg-base-100 mx-auto shadow-lg">
-                  <figure>
-                    <LazyLoad
-                      height={295}
-                      offsetVertical={500}
-                      debounce={false}
-                      placeholder={
-                        <div className="w-full h-[295px] flex items-center justify-center">
-                          <ColorRing
-                            visible={true}
-                            height="80"
-                            width="80"
-                            ariaLabel="blocks-loading"
-                            wrapperStyle={{}}
-                            wrapperClass="blocks-wrapper"
-                            colors={[
-                              "#e15b64",
-                              "#f47e60",
-                              "#f8b26a",
-                              "#abbd81",
-                              "#849b87",
-                            ]}
-                          />
-                        </div>
-                      }
-                    >
-                      <img
-                        src={chef.chef_picture}
-                        className="object-cover w-full h-[295px]"
-                        alt={chef.chef_name}
-                      />
-                    </LazyLoad>
-                  </figure>
+                  </LazyLoad>
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
+                    {recipe.isPremium && (
+                      <span className="badge bg-yellow-500 border-none text-black font-bold mb-2">
+                        Editor's Choice
+                      </span>
+                    )}
+                  </div>
+                </figure>
+                <div className="card-body p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h2 className="card-title text-xl font-bold text-gray-800 line-clamp-2 min-h-[3.5rem] group-hover:text-orange-600 transition-colors">
+                      {recipe.title}
+                    </h2>
+                  </div>
 
-                  <div className="card-body text-left">
-                    <h2 className="card-title ">{chef.chef_name}</h2>
-                    <p className="font-[500]">
-                      Experience:{" "}
-                      <span className="font-normal">{chef.experience}</span>
-                    </p>
-                    <p className="font-[500]">
-                      Numbers of Recipes:{" "}
-                      <span className="font-normal">{chef.recipes.length}</span>
-                    </p>
-                    <div className="card-actions flex justify-between items-center">
-                      <div className="flex items-center gap-3">
-                        <FaThumbsUp className="text-green-300" />{" "}
-                        <p>{chef.likes}</p>
-                      </div>
-                      <Link to={`/chefs/${chef.id}`}>
-                        <div className="btn btn-success text-white">
-                          View Recipe
-                        </div>
-                      </Link>
+                  <div className="flex items-center gap-4 text-sm text-gray-500 mt-auto pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-1">
+                      <span className="text-yellow-400 text-lg">★</span>
+                      <span className="font-semibold text-gray-700">
+                        {recipe.rating}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FaClock className="text-gray-400" />
+                      <span>{(Math.random() * 30 + 15).toFixed(0)} min</span>
+                    </div>
+                    <div className="ml-auto font-medium text-orange-600">
+                      View Recipe →
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </Link>
+          ))}
         </div>
+
+        {/* Load More Button */}
+        {visibleCount < recipes.length && (
+          <div className="text-center mt-16">
+            <button
+              onClick={handleSeeMore}
+              className="btn btn-primary btn-lg border-none bg-slate-900 text-white hover:bg-amber-600 hover:shadow-lg hover:shadow-amber-600/30 px-12 capitalize rounded-full transition-all duration-300 transform hover:-translate-y-1"
+            >
+              See More Recipes
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* extra section-1 */}
-
-      {/* testimonials section */}
-
-      <div className="bg-gray-100 py-10 px-5 md:px-20">
-        <h2 className="text-xl text-center mb-5 md:mb-10 md:text-4xl font-[600] ">
-          What our users say
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="bg-white shadow-md rounded-md p-5 flex flex-col items-center transform hover:scale-[1.05] transition-all duration-[300ms]">
-            <img
-              src="https://randomuser.me/api/portraits/women/12.jpg"
-              alt="Anna Smith"
-              className="w-20 h-20 rounded-full object-cover"
+      {/* Newsletter / CTA */}
+      <div className="bg-neutral-900 text-white py-24 mt-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/food.png')]"></div>
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <h2 className="text-4xl font-bold mb-6">
+            Master the Art of Australian Cooking
+          </h2>
+          <p className="mb-8 text-gray-400 max-w-xl mx-auto">
+            Join our newsletter to receive weekly exclusive recipes, chef
+            interviews, and cooking tips directly to your inbox.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="input input-lg w-full text-black"
             />
-            <h3 className="text-lg mt-3 font-[500]">Anna Smith</h3>
-            <p className="text-sm mt-2 text-gray-600 text-center">
-              "I love this website! It has helped me learn so many new recipes
-              and improve my cooking skills. The chefs are amazing and very
-              helpful."
-            </p>
-          </div>
-          <div className="bg-white shadow-md rounded-md p-5 flex flex-col items-center transform hover:scale-[1.05] transition-all duration-[300ms]">
-            <img
-              src="https://randomuser.me/api/portraits/men/34.jpg"
-              alt="John Doe"
-              className="w-20 h-20 rounded-full object-cover"
-            />
-            <h3 className="text-lg mt-3 font-[500]">John Doe</h3>
-            <p className="text-sm mt-2 text-gray-600 text-center">
-              "This website is awesome! I have learned how to make some of my
-              favorite dishes from different cuisines. The chefs are very
-              friendly and knowledgeable."
-            </p>
-          </div>
-          <div className="bg-white shadow-md rounded-md p-5 flex flex-col items-center transform hover:scale-[1.05] transition-all duration-[300ms]">
-            <img
-              src="https://randomuser.me/api/portraits/women/45.jpg"
-              alt="Mary Jones"
-              className="w-20 h-20 rounded-full object-cover"
-            />
-            <h3 className="text-lg mt-3 font-[500]">Mary Jones</h3>
-            <p className="text-sm mt-2 text-gray-600 text-center">
-              "This website is amazing! I have discovered so many new dishes and
-              flavors. The chefs are very professional and creative."
-            </p>
+            <button className="btn btn-primary btn-lg">Subscribe</button>
           </div>
         </div>
-      </div>
-
-      {/* extra section-2 */}
-      {/* subscribe section */}
-
-      <div className="bg-green-500 py-10 px-5 md:px-20">
-        <h2 className="text-xl text-center text-white mb-5 md:mb-10 md:text-4xl font-[600] ">
-          Subscribe to our newsletter
-        </h2>
-        <p className="text-sm text-center text-white mb-5 md:mb-10">
-          Get the latest recipes, tips and news delivered to your inbox
-        </p>
-        <form className="flex flex-col items-center">
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email address"
-            className="w-full md:w-[400px] py-3 px-5 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-green-400"
-          />
-          <button
-            type="submit"
-            className="w-full md:w-[400px] py-3 px-5 mt-5 rounded-md bg-white text-green-500 font-bold hover:bg-green-400 hover:text-white transition-all duration-[300ms]"
-          >
-            Subscribe
-          </button>
-        </form>
       </div>
     </div>
   );
