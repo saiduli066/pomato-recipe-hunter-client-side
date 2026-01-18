@@ -5,7 +5,7 @@ import Home from "../layouts/Home";
 import NotFoundPage from "../layouts/NotFoundPage";
 import RecipeDetails from "../layouts/recipeDetails/RecipeDetails";
 import Login from "./login/Login";
-import Register from "./register/Register";
+import Register from "./register/register";
 import BlogPage from "./blogPage/BlogPage";
 import PrivateRoute from "./PrivateRoute";
 import About from "./pages/About";
